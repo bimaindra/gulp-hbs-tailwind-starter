@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>wongdarjo | Gulp Starter Kit with Handlebars</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700;900&display=swap">
+        <link href="/assets/css/styles.css" rel="stylesheet">
+        <!-- Handlebars -->
+        <script src="/assets/js/handlebars.runtime.js"></script>
+        <script src="/assets/js/templates.js"></script>
+    </head>
+    <body class="wd-font-base wd-text-dark2 wd-leading-normal">
+        <div id="app"></div>
+        <script>
+            // This will render the template defined by App.hbs and the partial it uses
+            document.querySelector('#app').innerHTML = MyApp.templates.App();
+        </script>
+    </body>
+</html>
