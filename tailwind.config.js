@@ -14,13 +14,6 @@ module.exports = {
     },
     darkMode: 'class', // or 'media' or 'class'
     theme: {
-        screens: {
-            sm: '640px', // -- mobile
-            md: '768px', //-- tablet small
-            lg: '992px', //-- tablet large
-            xl: '1200px', //-- laptop
-            xxl: '1600px', //-- desktop large
-        },
         colors: {
             black: '#000000',
             white: '#ffffff',
@@ -56,36 +49,5 @@ module.exports = {
         extend: {},
     },
     variants: {},
-    plugins: [
-        plugin(function ({ addUtilities }) {
-            const container = {
-                '.container': {
-                    maxWidth: '100%',
-                    padding: '0 1rem',
-                    '@screen sm': {
-                        maxWidth: '100%',
-                        padding: '0 1rem',
-                    },
-                    '@screen md': {
-                        maxWidth: '688px',
-                        padding: '0',
-                    },
-                    '@screen lg': {
-                        maxWidth: '864px',
-                        padding: '0',
-                    },
-                    '@screen xl': {
-                        maxWidth: '1140px',
-                        padding: '0',
-                    },
-                    '@screen xxl': {
-                        maxWidth: '1350px',
-                        padding: '0',
-                    },
-                },
-            };
-
-            addUtilities(container, ['responsive']);
-        }),
-    ],
+    plugins: [],
 };
