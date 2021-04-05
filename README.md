@@ -37,6 +37,9 @@ Update `tailwind.config` depends on your project.
 
 In this version, it's only support for compiling Handlebars template using partial configuration ([`here's the example`](https://github.com/lazd/gulp-handlebars/tree/master/examples/partials)) and also compiling Tailwind CSS.
 
-WIP : 
+
+
+##### Notes
+WIP :
 - support for JS compiler
 - support for modern img compiler (Webp etc)
