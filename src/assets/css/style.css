@@ -1,3 +1,8 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.wd-l-main {
+    @apply wd-grid;
+    grid-template-rows: auto 1fr auto;
+}
