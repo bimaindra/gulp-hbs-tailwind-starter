@@ -1,0 +1,61 @@
+{
+    "name": "gulp-handlebars-tailwindcss-starterkit",
+    "version": "1.0.0",
+    "description": "Gulp starter kit with Handlebars and Tailwind CSS",
+    "main": "index.js",
+    "scripts": {
+        "serve": "NODE_ENV='development' gulp serve",
+        "dev": "NODE_ENV='development' gulp",
+        "build": "NODE_ENV='production' gulp"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit.git"
+    },
+    "keywords": [
+        "html",
+        "css",
+        "js",
+        "gulp",
+        "tailwind"
+    ],
+    "author": "bimaindra",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit/issues"
+    },
+    "homepage": "https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit#readme",
+    "dependencies": {
+        "animejs": "^3.2.1",
+        "tailwindcss": "^2.0.4"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.13.10",
+        "@tailwindcss/jit": "^0.1.18",
+        "autoprefixer": "^10.2.5",
+        "browser-sync": "^2.26.14",
+        "del": "^6.0.0",
+        "eslint": "^7.22.0",
+        "gulp": "^4.0.2",
+        "gulp-better-rollup": "^4.0.1",
+        "gulp-clean-css": "^4.3.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-declare": "^0.3.0",
+        "gulp-handlebars": "^5.0.2",
+        "gulp-noop": "^1.0.1",
+        "gulp-plumber": "^1.2.1",
+        "gulp-postcss": "^9.0.0",
+        "gulp-sass": "^4.1.0",
+        "gulp-sourcemaps": "^3.0.0",
+        "gulp-wrap": "^0.15.0",
+        "handlebars": "^4.7.7",
+        "log-symbols": "^4.1.0",
+        "merge-stream": "^2.0.0",
+        "postcss-import": "^14.0.1",
+        "postcss-nested": "^5.0.5",
+        "rollup": "^2.42.1",
+        "rollup-plugin-babel": "^4.4.0",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-node-resolve": "^5.2.0"
+    }
+}
