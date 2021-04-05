@@ -1,15 +1,16 @@
 {
-    "name": "letter-move",
+    "name": "gulp-handlebars-tailwindcss-starterkit",
     "version": "1.0.0",
-    "description": "simple letter move using animejs",
+    "description": "Gulp starter kit with Handlebars and Tailwind CSS",
     "main": "index.js",
     "scripts": {
         "serve": "NODE_ENV='development' gulp serve",
+        "dev": "NODE_ENV='development' gulp",
         "build": "NODE_ENV='production' gulp"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/wongdarjo/letter-move.git"
+        "url": "git+https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit.git"
     },
     "keywords": [
         "html",
@@ -21,9 +22,9 @@
     "author": "bimaindra",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/wongdarjo/letter-move/issues"
+        "url": "https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit/issues"
     },
-    "homepage": "https://github.com/wongdarjo/letter-move#readme",
+    "homepage": "https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit#readme",
     "dependencies": {
         "animejs": "^3.2.1",
         "tailwindcss": "^2.0.4"
@@ -41,6 +42,7 @@
         "gulp-concat": "^2.6.1",
         "gulp-declare": "^0.3.0",
         "gulp-handlebars": "^5.0.2",
+        "gulp-plumber": "^1.2.1",
         "gulp-postcss": "^9.0.0",
         "gulp-sass": "^4.1.0",
         "gulp-wrap": "^0.15.0",
