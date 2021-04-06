@@ -27,7 +27,7 @@
     "homepage": "https://github.com/wongdarjo/gulp-handlebars-tailwindcss-starterkit#readme",
     "dependencies": {
         "animejs": "^3.2.1",
-        "tailwindcss": "^2.0.4"
+        "tailwindcss": "^2.1.1"
     },
     "devDependencies": {
         "@babel/core": "^7.13.10",

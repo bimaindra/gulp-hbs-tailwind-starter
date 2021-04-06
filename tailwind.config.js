@@ -3,9 +3,8 @@ const plugin = require('tailwindcss/plugin');
 
 module.exports = {
     prefix: 'wd-',
+    mode: 'jit',
     purge: {
-        enabled: true,
-        preserveHtmlElements: true,
         content: [
             './src/public/**/*.html', 
             './src/public/**/*.hbs', 
