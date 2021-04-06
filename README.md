@@ -40,5 +40,4 @@ In this version, it's only support for compiling Handlebars template using parti
 
 
 ##### Notes WIP
-- support for JS compiler
 - support for modern img compiler (Webp etc)
