@@ -19,19 +19,18 @@ const noop = require("gulp-noop");
 const sourcemaps = require('gulp-sourcemaps');
 
 //-- JS
-// const rollup = require('gulp-better-rollup');
-// const babel = require('rollup-plugin-babel');
-// const resolve = require('rollup-plugin-node-resolve');
-// const commonjs = require('rollup-plugin-commonjs');
-// const { watch } = require('rollup');
+const rollup = require('rollup');
+const babel = require('rollup-plugin-babel');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const replace = require('rollup-plugin-replace');
 
 //-- CSS
 const sass = require('gulp-sass'); //-- if needed
 const postcss = require('gulp-postcss');
-const postscssimport = require('postcss-import');
-const postscssnested = require('postcss-nested');
+const postcssimport = require('postcss-import');
+const postcssnested = require('postcss-nested');
 const tailwindcss = require('tailwindcss');
-const tailwindjit = require('@tailwindcss/jit'); //-- waiting for tailwind v3
 const autoprefixer = require('autoprefixer');
 const cleanCss = require('gulp-clean-css');
 
@@ -132,15 +131,38 @@ gulp.task('compile-css', () => {
     return gulp.src(`${dir.source.css}/*.css`)
         .pipe(!isDebug ? noop() : sourcemaps.init())
         .pipe(postcss([
-            postscssimport,
+            postcssimport,
             tailwindcss(tailwindConfig),
-            postscssnested,
+            postcssnested,
             autoprefixer,
         ]))
         .pipe(concat({ path: 'style.css'}))
         .pipe(isDebug ? noop() : cleanCss({compatibility: 'ie8'}))
         .pipe(!isDebug ? noop() : sourcemaps.write('./maps'))
         .pipe(gulp.dest(dir.build.css));
+});
+
+//-- COMPILE JS
+gulp.task('compile-js', () => {
+    return rollup.rollup({
+        input: `${dir.source.js}/main.js`,
+        plugins: [
+            babel({
+                exclude: 'node_modules/**'
+            }),
+            commonjs(),
+            replace({
+                'process.env.NODE_ENV': JSON.stringify('production')
+            }),
+            resolve(),
+        ]
+    }).then(bundle => {
+        return bundle.write({
+            file: `${dir.build.js}/main.js`,
+            format: 'es',
+            sourcemap: isDebug ? true : false
+        })
+    })
 });
 
 
@@ -159,12 +181,13 @@ gulp.task('copy-html', () => {
 
 
 //-- COMPILE
-gulp.task('compile', gulp.series('clean', gulp.parallel('compile-css', 'copy-js-hbs', 'copy-html'), 'compile-hbs'));
+gulp.task('compile', gulp.series('clean', gulp.parallel('compile-css', 'compile-js', 'copy-js-hbs', 'copy-html'), 'compile-hbs'));
 
 
 //-- WATCH FILE
 gulp.task('watch-files', () => {
     gulp.watch(`${dir.source.css}/**/*.css`, gulp.series(gulp.parallel('compile-css'), 'browser-reload'));
+    gulp.watch(`${dir.source.js}/**/*.js`, gulp.series(gulp.parallel('compile-js'), 'browser-reload'));
     gulp.watch(`${dir.source.public}/pages/*.html`, gulp.series(gulp.parallel('compile-css', 'copy-html'), 'browser-reload'));
     gulp.watch(`${dir.source.public}/**/*.hbs`, gulp.series(gulp.parallel('compile-css'), 'compile-hbs', 'browser-reload'));
     console.log("\t" + logSymbols.info,"Watching for changes...");
@@ -179,7 +202,7 @@ gulp.task('build-done', (done) => {
 
 
 //--- SERVING FILES
-gulp.task('serve', gulp.series('clean', gulp.parallel('compile-css', 'copy-js-hbs', 'copy-html'), 'compile-hbs', 'browser-sync', 'watch-files'));
+gulp.task('serve', gulp.series('clean', gulp.parallel('compile-css', 'compile-js', 'copy-js-hbs', 'copy-html'), 'compile-hbs', 'browser-sync', 'watch-files'));
 
 
 //--- DEFAULT TASK
