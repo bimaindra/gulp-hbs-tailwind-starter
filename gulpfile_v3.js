@@ -5,8 +5,8 @@
 **/
 
 //--- GENERAL
-const { series, parallel, src, dest, watch } = require('gulp');
 const path = require('path');
+const gulp = require('gulp');
 const del = require('del');
 const logSymbols = require('log-symbols');
 const browserSync = require('browser-sync').create();
@@ -68,42 +68,46 @@ const dir = {
     },
 };
 
-//--- BROWSER-SYNC INIT
-function browserInit(done) {
+
+//--- BROWSER SYNC INIT
+gulp.task('browser-sync', (done) => {
     browserSync.init({
         server: {
             baseDir: dir.build.base,
         },
     });
-
     done();
-};
+});
 
-//--- BROWSER-SYNC RELOAD
-function browserReload(done) {
+
+//--- BROWSER SYNC RELOAD
+gulp.task('browser-reload', (done) => {
     console.log(logSymbols.info,'Reloading BrowserSync...');
     browserSync.reload();
-
     done();
-};
+});
+
 
 //-- CLEANUP BUILD FOLDER
-function cleanBuild() {
+gulp.task('clean', () => {
     console.log(logSymbols.info,'Clean up build folder...');
-    return del([root.build]);
-};
+    return del([root.build])
+});
+
 
 //-- FINISHED COMPILE MESSAGE
-function finishedCompileMessage(done) {
-    console.log(logSymbols.success,'Finished compiling!');
-    done();
-};
+gulp.task('compile-done', (done) => {
+    console.log(logSymbols.success,'All is compiled!');
+    done()
+});
+
 
 //--- COMPILE HBS TEMPLATE
-function hbsCompile() {
+// example source: https://github.com/lazd/gulp-handlebars/tree/master/examples/partials
+gulp.task('compile-hbs', () => {
     // Assume all partials start with an underscore
     // You could also put them in a folder such as source/templates/partials/*.hbs
-    let partials = src([`${dir.source.public}/partials/**/*.hbs`])
+    let partials = gulp.src([`${dir.source.public}/partials/**/*.hbs`])
         .pipe(handlebars())
         .pipe(wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, Handlebars.template(<%= contents %>));', {}, {
             imports: {
@@ -115,7 +119,7 @@ function hbsCompile() {
             }
         }));
   
-    let templates = src(`${dir.source.public}/templates/**/*.hbs`)
+    let templates = gulp.src(`${dir.source.public}/templates/**/*.hbs`)
         .pipe(handlebars())
         .pipe(wrap('Handlebars.template(<%= contents %>)'))
         .pipe(declare({
@@ -126,12 +130,13 @@ function hbsCompile() {
     // Output both the partials and the templates as build/js/templates.js
     return merge(partials, templates)
         .pipe(concat('templates.js'))
-        .pipe(dest(dir.build.js));
-};
+        .pipe(gulp.dest(dir.build.js));
+});
+
 
 //--- COMPILE CSS
-function cssCompile() {
-    return src(`${dir.source.css}/*.css`)
+gulp.task('compile-css', () => {
+    return gulp.src(`${dir.source.css}/*.css`)
         .pipe(!isDebug ? noop() : sourcemaps.init())
         .pipe(postcss([
             postcssimport,
@@ -142,11 +147,12 @@ function cssCompile() {
         .pipe(concat({ path: 'style.css'}))
         .pipe(isDebug ? noop() : cleanCss({compatibility: 'ie8'}))
         .pipe(!isDebug ? noop() : sourcemaps.write('./maps'))
-        .pipe(dest(dir.build.css));
-};
+        .pipe(gulp.dest(dir.build.css));
+});
+
 
 //--- COMPILE JS
-function jsCompile() {
+gulp.task('compile-js', () => {
     return rollup.rollup({
         input: `${dir.source.js}/main.js`,
         plugins: [
@@ -166,41 +172,40 @@ function jsCompile() {
             sourcemap: isDebug ? true : false
         })
     })
-};
+});
 
-//--- COPY JS HBS RUNTIME
-function hbsRuntime() {
-    return src(`${root.npm}/handlebars/dist/handlebars.runtime.js`)
-        .pipe(dest(dir.build.js));
-};
+
+//--- COPY JS HBS
+gulp.task('copy-js-hbs', () => {
+    return gulp.src(`${root.npm}/handlebars/dist/handlebars.runtime.js`)
+        .pipe(gulp.dest(dir.build.js));
+});
+
 
 //--- COPY HTML
-function htmlCopy() {
-    return src(`${dir.source.public}/pages/*.html`)
-        .pipe(dest(dir.build.base));
-};
+gulp.task('copy-html', () => {
+    return gulp.src(`${dir.source.public}/pages/*.html`)
+        .pipe(gulp.dest(dir.build.base));
+});
 
-//--- WATCHING FILES CHANGES
-function watchFiles() {
-    watch(`${dir.source.css}/**/*.css`, series(parallel(cssCompile), finishedCompileMessage, browserReload));
-    watch(`${dir.source.js}/**/*.js`, series(parallel(jsCompile), finishedCompileMessage, browserReload));
-    watch(`${dir.source.public}/pages/*.html`, series(parallel(cssCompile, htmlCopy), finishedCompileMessage, browserReload));
-    watch(`${dir.source.public}/**/*.hbs`, series(parallel(cssCompile), hbsCompile, finishedCompileMessage, browserReload));
+
+//--- WATCH FILE
+gulp.task('watch-files', () => {
+    gulp.watch(`${dir.source.css}/**/*.css`, gulp.series(gulp.parallel('compile-css'), 'browser-reload'));
+    gulp.watch(`${dir.source.js}/**/*.js`, gulp.series(gulp.parallel('compile-js'), 'browser-reload'));
+    gulp.watch(`${dir.source.public}/pages/*.html`, gulp.series(gulp.parallel('compile-css', 'copy-html'), 'browser-reload'));
+    gulp.watch(`${dir.source.public}/**/*.hbs`, gulp.series(gulp.parallel('compile-css'), 'compile-hbs', 'browser-reload'));
     console.log("\t" + logSymbols.info,"Watching for changes...");
-};
+});
 
-//--- COMPILE FILES
-exports.build = series(
-    cleanBuild, 
-    parallel(
-        cssCompile, 
-        jsCompile,
-        hbsRuntime,
-        htmlCopy
-    ),
-    hbsCompile,
-    finishedCompileMessage
-);
+
+//--- COMPILE
+gulp.task('compile', gulp.series('clean', gulp.parallel('compile-css', 'compile-js', 'copy-js-hbs', 'copy-html'), 'compile-hbs'));
+
+
+//--- SERVING FILES
+gulp.task('serve', gulp.series('clean', gulp.parallel('compile-css', 'compile-js', 'copy-js-hbs', 'copy-html'), 'compile-hbs', 'browser-sync', 'watch-files'));
+
 
 //--- DEFAULT TASK
-exports.default = isDebug ? series(this.build, browserInit, watchFiles) : series(this.build);
+gulp.task('default', gulp.series('compile', 'compile-done'));

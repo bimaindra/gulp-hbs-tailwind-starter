@@ -4,8 +4,9 @@
     "description": "Gulp starter kit with Handlebars and Tailwind CSS",
     "main": "index.js",
     "scripts": {
-        "serve": "NODE_ENV='development' gulp serve",
-        "dev": "NODE_ENV='development' gulp",
+        "serve": "NODE_ENV='development' gulp",
+        "start": "NODE_ENV='development' gulp",
+        "dev": "gulp build",
         "build": "NODE_ENV='production' gulp"
     },
     "repository": {
