@@ -174,6 +174,11 @@ function hbsRuntime() {
         .pipe(dest(dir.build.js));
 };
 
+// COPY IMAGES
+function imagesCopy() {
+    return src(`${dir.source.images}/**/*`).pipe(dest(dir.build.images));
+}
+
 //--- COPY HTML
 function htmlCopy() {
     return src(`${dir.source.public}/pages/*.html`)
@@ -184,6 +189,7 @@ function htmlCopy() {
 function watchFiles() {
     watch(`${dir.source.css}/**/*.css`, series(parallel(cssCompile), finishedCompileMessage, browserReload));
     watch(`${dir.source.js}/**/*.js`, series(parallel(jsCompile), finishedCompileMessage, browserReload));
+    watch(`${dir.source.images}/**/*`, series(parallel(imagesCopy), finishedCompileMessage, browserReload));
     watch(`${dir.source.public}/pages/*.html`, series(parallel(cssCompile, htmlCopy), finishedCompileMessage, browserReload));
     watch(`${dir.source.public}/**/*.hbs`, series(parallel(cssCompile), hbsCompile, finishedCompileMessage, browserReload));
     console.log("\t" + logSymbols.info,"Watching for changes...");
@@ -195,8 +201,9 @@ exports.build = series(
     parallel(
         cssCompile, 
         jsCompile,
+        imagesCopy,
         hbsRuntime,
-        htmlCopy
+        htmlCopy,
     ),
     hbsCompile,
     finishedCompileMessage
