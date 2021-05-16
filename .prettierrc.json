@@ -5,5 +5,16 @@
   "arrowParens": "always",
   "endOfLine": "crlf",
   "htmlWhitespaceSensitivity": "ignore",
-  "proseWrap": "always"
+  "proseWrap": "always",
+  "bracketSpacing": true,
+  "insertPragma": false,
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false,
+  "printWidth": 250,
+  "quoteProps": "as-needed",
+  "requirePragma": false,
+  "trailingComma": "none",
+  "useTabs": true,
+  "vueIndentScriptAndStyle": false,
+  "rangeStart": 0
 }
