@@ -4,7 +4,7 @@
   "singleQuote": true,
   "arrowParens": "always",
   "endOfLine": "crlf",
-  "htmlWhitespaceSensitivity": "ignore",
+  "htmlWhitespaceSensitivity": "css",
   "proseWrap": "always",
   "bracketSpacing": true,
   "insertPragma": false,
@@ -14,7 +14,7 @@
   "quoteProps": "as-needed",
   "requirePragma": false,
   "trailingComma": "none",
-  "useTabs": true,
+  "useTabs": false,
   "vueIndentScriptAndStyle": false,
   "rangeStart": 0
 }
